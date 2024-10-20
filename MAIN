@@ -1,0 +1,86 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        List<ReservaHotel> reservas = new ArrayList<>();
+
+        boolean continuar = true;
+
+        while (continuar) {
+            System.out.println("Seleccione una opción:");
+            System.out.println("1. Crear nueva reserva");
+            System.out.println("2. Modificar reserva existente");
+            System.out.println("3. Mostrar todas las reservas");
+            System.out.println("4. Salir");
+
+            int opcion = scanner.nextInt();
+            scanner.nextLine(); // Consumir nueva línea
+
+            switch (opcion) {
+                case 1: // Crear nueva reserva
+                    System.out.print("Ingrese el nombre del cliente: ");
+                    String nombreCliente = scanner.nextLine();
+
+                    System.out.print("Ingrese el número de días de estadía: ");
+                    int diasEstadia = scanner.nextInt();
+
+                    System.out.print("Ingrese el tipo de habitación (Individual, Doble, Suite): ");
+                    String tipoHabitacion = scanner.next();
+
+                    System.out.print("Ingrese el tipo de reserva (Estándar, Premium, Todo Incluido): ");
+                    String tipoReserva = scanner.next();
+
+                    try {
+                        ReservaHotel nuevaReserva = new ReservaHotel(nombreCliente, diasEstadia, tipoHabitacion, tipoReserva);
+                        reservas.add(nuevaReserva);
+                        System.out.println("Reserva creada: " + nuevaReserva);
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("Error: " + e.getMessage());
+                    }
+                    break;
+
+                case 2: // Modificar reserva existente
+                    System.out.print("Ingrese el índice de la reserva a modificar (0 - " + (reservas.size() - 1) + "): ");
+                    int indice = scanner.nextInt();
+
+                    if (indice >= 0 && indice < reservas.size()) {
+                        ReservaHotel reserva = reservas.get(indice);
+                        System.out.println("Reserva actual: " + reserva);
+
+                        System.out.print("Ingrese el nuevo número de días de estadía: ");
+                        int nuevosDias = scanner.nextInt();
+                        reserva.setDiasEstadia(nuevosDias);
+
+                        System.out.print("Ingrese el nuevo tipo de habitación (Individual, Doble, Suite): ");
+                        String nuevoTipoHabitacion = scanner.next();
+                        reserva.setTipoHabitacion(nuevoTipoHabitacion);
+
+                        System.out.println("Reserva modificada: " + reserva);
+                        System.out.println("Nuevo costo total: " + reserva.calcularCosto());
+                    } else {
+                        System.out.println("Índice no válido.");
+                    }
+                    break;
+
+                case 3: // Mostrar todas las reservas
+                    System.out.println("Reservas actuales:");
+                    for (ReservaHotel r : reservas) {
+                        System.out.println(r);
+                    }
+                    break;
+
+                case 4: // Salir
+                    continuar = false;
+                    break;
+
+                default:
+                    System.out.println("Opción no válida. Intente de nuevo.");
+            }
+        }
+
+        scanner.close(); // Cerrar el scanner
+    }
+}

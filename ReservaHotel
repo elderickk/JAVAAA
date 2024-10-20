@@ -1,0 +1,107 @@
+ class ReservaHotel {
+    private final String nombreCliente;
+    private int diasEstadia;
+    private String tipoHabitacion;
+    private String tipoReserva;
+
+    // Arreglos de tipos válidos
+    private static final String[] TIPOS_HABITACION_VALIDOS = {"Individual", "Doble", "Suite"};
+    private static final String[] TIPOS_RESERVA_VALIDOS = {"Estándar", "Premium", "Todo Incluido"};
+
+    // Constructor
+    public ReservaHotel(String nombreCliente, int diasEstadia, String tipoHabitacion, String tipoReserva) {
+        this.nombreCliente = nombreCliente;
+        this.diasEstadia = diasEstadia;
+        setTipoHabitacion(tipoHabitacion);
+        setTipoReserva(tipoReserva);
+    }
+
+    // Getters y Setters
+    public String getNombreCliente() {
+        return nombreCliente;
+    }
+
+    public int getDiasEstadia() {
+        return diasEstadia;
+    }
+
+    public void setDiasEstadia(int diasEstadia) {
+        if (diasEstadia > 0) {
+            this.diasEstadia = diasEstadia;
+        } else {
+            throw new IllegalArgumentException("Los días de estadía deben ser mayores que cero.");
+        }
+    }
+
+    public String getTipoHabitacion() {
+        return tipoHabitacion;
+    }
+
+    public void setTipoHabitacion(String tipoHabitacion) {
+        if (esTipoHabitacionValido(tipoHabitacion)) {
+            this.tipoHabitacion = tipoHabitacion;
+        } else {
+            throw new IllegalArgumentException("Tipo de habitación no válido. Opciones válidas: " + String.join(", ", TIPOS_HABITACION_VALIDOS));
+        }
+    }
+
+    public String getTipoReserva() {
+        return tipoReserva;
+    }
+
+    public void setTipoReserva(String tipoReserva) {
+        if (esTipoReservaValido(tipoReserva)) {
+            this.tipoReserva = tipoReserva;
+        } else {
+            throw new IllegalArgumentException("Tipo de reserva no válido. Opciones válidas: " + String.join(", ", TIPOS_RESERVA_VALIDOS));
+        }
+    }
+
+    private boolean esTipoHabitacionValido(String tipoHabitacion) {
+        for (String tipo : TIPOS_HABITACION_VALIDOS) {
+            if (tipo.equals(tipoHabitacion)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean esTipoReservaValido(String tipoReserva) {
+        for (String tipo : TIPOS_RESERVA_VALIDOS) {
+            if (tipo.equals(tipoReserva)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public double calcularCosto() {
+        double tarifaPorDia;
+        switch (tipoHabitacion) {
+            case "Individual":
+                tarifaPorDia = 50.0; // Ejemplo
+                break;
+            case "Doble":
+                tarifaPorDia = 75.0; // Ejemplo
+                break;
+            case "Suite":
+                tarifaPorDia = 100.0; // Ejemplo
+                break;
+            default:
+                tarifaPorDia = 0.0;
+        }
+
+        double multiplicador = tipoReserva.equals("Todo Incluido") ? 1.5 : 1.0; // Ejemplo
+        return diasEstadia * tarifaPorDia * multiplicador;
+    }
+
+    @Override
+    public String toString() {
+        return "ReservaHotel{" +
+                "nombreCliente='" + nombreCliente + '\'' +
+                ", diasEstadia=" + diasEstadia +
+                ", tipoHabitacion='" + tipoHabitacion + '\'' +
+                ", tipoReserva='" + tipoReserva + '\'' +
+                '}';
+    }
+}
